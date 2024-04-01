@@ -1,0 +1,87 @@
+
+@import '_variables';
+// Header styles
+@import '_header';
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Header styles
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+// Form styles
+#course-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  
+  label {
+    width: calc(50% - 5px);
+    display: block;
+    margin-bottom: 10px;
+    flex: 1 0 45%;
+  }
+  
+  input, select {
+    width: calc(50% - 5px);
+    padding: 10px;
+    border: 1px solid $secondary-color;
+    border-radius: 5px;
+    flex: 1 0 45%;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: $primary-color;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}
+
+// Course list styles
+#courses-list {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .course-item {
+    margin-bottom: 10px;
+    
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

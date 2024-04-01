@@ -1,0 +1,223 @@
+// Partiell för header
+header {
+    background-color: $primary-color;
+    padding: 30px;
+    display: flex;
+    width: 100%;
+
+    h1 {
+        color: #fff;
+    }
+
+    // Navigation styling
+    nav {
+        box-shadow: none;
+        font-size: 1.2em;
+        position: absolute;
+        right: 0;
+        left: 20px;
+        height: auto;
+        width: 250px;
+        display: none;
+        z-index: 1;
+
+        a {
+            font-size: 0.7em;
+            margin-left: 20px;
+            text-decoration: none;
+            color: #242323;
+            font-weight: bold;
+        }
+
+        ul {
+            width: 100%;
+            list-style-type: none;
+            text-align: justify;
+            margin: 20px auto;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: justify;
+        }
+
+        ul li {
+            display: flex;
+            margin-right: 100px;
+        }
+
+        .menu-btn.close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            background-color: #ede8e8;
+            border: 2px solid #e8eaec;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .menu-btn:hover {
+            background-color: #F2F5EA;
+            box-shadow: 0 0px 5px rgba(0, 0, 0, 0.421);
+        }
+
+        .menu-btn {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background-color: #101010;
+            border: rgb(0, 0, 0) solid 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            height: 10vh;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bars {
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: #2C363F;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+
+        .c1,
+        .c2 {
+            width: 30px;
+            position: relative;
+            top: 0;
+        }
+
+        .menu-btn,
+        .bars {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+    }
+
+
+// Styles for larger screens
+@media only screen and (min-width: 1025px) {
+    nav {
+        display: block !important;
+        position: static;
+        box-shadow: 0 0px 0px;
+        right: 0;
+        top: 0;
+        height: auto;
+        font-size: 1.4em;
+        width: auto;
+
+        ul {
+            display: flex;
+        }
+
+        li {
+            display: inline;
+            padding: 1.2em 0;
+        }
+
+        .menu-btn {
+            display: none;
+        }
+
+        #open-menu {
+            display: none !important;
+        }
+
+        #close-menu {
+            display: none !important;
+        }
+    }
+}
+
+// Media query for max-width: 1024px
+@media screen and (max-width: 1024px) {
+    nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 70vh;
+        width: 300px;
+        background-color: #FFFFFF;
+        display: none;
+        z-index: 1;
+
+        ul {
+            width: 100%;
+            list-style-type: none;
+            text-align: justify;
+            margin: 20px auto;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: justify;
+        }
+
+        .menu-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+}
+
+// Media query for max-width: 768px
+@media screen and (max-width: 768px) {
+    nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 70vh;
+        width: 300px;
+        background-color: #FFFFFF;
+        display: none;
+        z-index: 1;
+
+        ul {
+            width: 100%;
+            list-style-type: none;
+            text-align: justify;
+            margin: 20px auto;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: justify;
+        }
+
+        .menu-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+}
+}

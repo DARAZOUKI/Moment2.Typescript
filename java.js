@@ -1,50 +1,80 @@
-var TodoList = /** @class */ (function () {
-    function TodoList() {
+var CustomTodoList = /** @class */ (function () {
+    function CustomTodoList() {
         this.todos = [];
-        this.loadFromLocalStorage();
+        this.loadCustomFromLocalStorage();
     }
-    TodoList.prototype.addTodo = function (task, priority) {
+    CustomTodoList.prototype.addCustomTodoTask = function (task, priority) {
         if (!task || priority < 1 || priority > 3) {
             return false;
         }
-        var todo = {
-            task: task,
-            completed: false,
-            priority: priority,
-            createdAt: new Date()
-        };
+        var todo = { task: task, completed: false, priority: priority };
         this.todos.push(todo);
-        this.saveToLocalStorage();
+        this.saveCustomToLocalStorage();
         return true;
     };
-    TodoList.prototype.markTodoCompleted = function (todoIndex) {
+    CustomTodoList.prototype.markCustomTodoCompleted = function (todoIndex) {
         if (todoIndex >= 0 && todoIndex < this.todos.length) {
             this.todos[todoIndex].completed = true;
-            this.saveToLocalStorage();
+            this.saveCustomToLocalStorage();
         }
     };
-    TodoList.prototype.deleteTodo = function (todoIndex) {
-        if (todoIndex >= 0 && todoIndex < this.todos.length) {
-            this.todos.splice(todoIndex, 1);
-            this.saveToLocalStorage();
-        }
-    };
-    TodoList.prototype.getTodos = function () {
+    CustomTodoList.prototype.getCustomTodos = function () {
         return this.todos;
     };
-    TodoList.prototype.saveToLocalStorage = function () {
+    CustomTodoList.prototype.saveCustomToLocalStorage = function () {
         localStorage.setItem('todos', JSON.stringify(this.todos));
     };
-    TodoList.prototype.loadFromLocalStorage = function () {
+    CustomTodoList.prototype.loadCustomFromLocalStorage = function () {
         var storedTodos = localStorage.getItem('todos');
         if (storedTodos) {
             this.todos = JSON.parse(storedTodos);
         }
     };
-    return TodoList;
+    return CustomTodoList;
 }());
-// Usage example
-var todoList = new TodoList();
-todoList.addTodo('Buy groceries', 1);
-todoList.addTodo('Finish homework', 2);
-console.log(todoList.getTodos());
+var customTodoList = new CustomTodoList();
+var customTodoForm = document.getElementById('todo-form');
+var customTaskInput = document.getElementById('task');
+var customPriorityInput = document.getElementById('priority');
+var customTodoListContainer = document.getElementById('todo-list');
+var customMarkCompletedButton = document.getElementById('mark-completed');
+var customErrorMessage = document.getElementById('error-message');
+customTodoForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var task = customTaskInput.value.trim();
+    var priority = parseInt(customPriorityInput.value.trim());
+    if (!task) {
+        showCustomError('Task cannot be empty.');
+    }
+    else if (isNaN(priority) || priority < 1 || priority > 3) {
+        showCustomError('Priority must be a number between 1 and 3.');
+    }
+    else {
+        customTodoList.addCustomTodoTask(task, priority);
+        renderCustomTodos();
+        customTaskInput.value = '';
+        customPriorityInput.value = '';
+        showCustomError(''); // Clear error message
+    }
+});
+customMarkCompletedButton.addEventListener('click', function () {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    checkboxes.forEach(function (checkbox) {
+        var todoIndex = parseInt(checkbox.dataset.index);
+        customTodoList.markCustomTodoCompleted(todoIndex);
+    });
+    renderCustomTodos();
+});
+function renderCustomTodos() {
+    customTodoListContainer.innerHTML = '';
+    var todos = customTodoList.getCustomTodos();
+    todos.forEach(function (todo, index) {
+        var todoItem = document.createElement('li');
+        todoItem.innerHTML = "\n            <input type=\"checkbox\" ".concat(todo.completed ? 'checked' : '', " data-index=\"").concat(index, "\">\n            <span style=\"text-decoration: ").concat(todo.completed ? 'line-through' : 'none', "\">").concat(todo.task, " - Priority: ").concat(todo.priority, "</span>\n        ");
+        customTodoListContainer.appendChild(todoItem);
+    });
+}
+function showCustomError(message) {
+    customErrorMessage.textContent = message;
+}
+renderCustomTodos();

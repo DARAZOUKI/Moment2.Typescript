@@ -7,8 +7,33 @@ var CustomTodoList = /** @class */ (function () {
         if (!task || priority < 1 || priority > 3) {
             return false;
         }
-        var todo = { task: task, completed: false, priority: priority };
+        // Check if the task and priority already exist
+        for (var _i = 0, _a = this.todos; _i < _a.length; _i++) {
+            var todo_1 = _a[_i];
+            if (todo_1.task === task && todo_1.priority === priority) {
+                return false; // Task already exists, return false
+            }
+        }
+        var todo = { task: task, completed: false, priority: priority, createdDate: new Date() }; // Added createdDate
         this.todos.push(todo);
+        this.saveCustomToLocalStorage();
+        return true;
+    };
+    CustomTodoList.prototype.editCustomTodoTask = function (taskIndex, task, priority) {
+        if (taskIndex < 0 || taskIndex >= this.todos.length || !task || priority < 1 || priority > 3) {
+            return false;
+        }
+        var existingTodo = this.todos[taskIndex];
+        existingTodo.task = task;
+        existingTodo.priority = priority;
+        this.saveCustomToLocalStorage();
+        return true;
+    };
+    CustomTodoList.prototype.deleteCustomTodoTask = function (taskIndex) {
+        if (taskIndex < 0 || taskIndex >= this.todos.length) {
+            return false;
+        }
+        this.todos.splice(taskIndex, 1);
         this.saveCustomToLocalStorage();
         return true;
     };
@@ -74,12 +99,37 @@ customDeleteCompletedButton.addEventListener('click', function () {
     customTodoList.deleteCompletedTodos();
     renderCustomTodos();
 });
+customTodoListContainer.addEventListener('click', function (e) {
+    var target = e.target;
+    var todoItem = target.closest('li');
+    if (!todoItem)
+        return; // Exit if clicked outside a todo item
+    var todoIndex = parseInt(todoItem.dataset.index);
+    // Edit todo task
+    if (target.nodeName === 'SPAN') {
+        var todo = customTodoList.getCustomTodos()[todoIndex];
+        var newTask = prompt('Enter new task:', todo.task);
+        var newPriority = parseInt(prompt('Enter new priority (1-3):', String(todo.priority)) || '0');
+        if (newTask !== null && !isNaN(newPriority) && newPriority >= 1 && newPriority <= 3) {
+            customTodoList.editCustomTodoTask(todoIndex, newTask, newPriority);
+            renderCustomTodos();
+        }
+    }
+    // Delete todo task
+    else if (target.nodeName === 'BUTTON') {
+        if (confirm('Are you sure you want to delete this todo?')) {
+            customTodoList.deleteCustomTodoTask(todoIndex);
+            renderCustomTodos();
+        }
+    }
+});
 function renderCustomTodos() {
     customTodoListContainer.innerHTML = '';
     var todos = customTodoList.getCustomTodos();
     todos.forEach(function (todo, index) {
         var todoItem = document.createElement('li');
-        todoItem.innerHTML = "\n            <input type=\"checkbox\" ".concat(todo.completed ? 'checked' : '', " data-index=\"").concat(index, "\">\n            <span style=\"text-decoration: ").concat(todo.completed ? 'line-through' : 'none', "\">").concat(todo.task, " - Priority: ").concat(todo.priority, "</span>\n        ");
+        todoItem.dataset.index = String(index);
+        todoItem.innerHTML = "\n            <input type=\"checkbox\" ".concat(todo.completed ? 'checked' : '', " data-index=\"").concat(index, "\">\n            <span style=\"text-decoration: ").concat(todo.completed ? 'line-through' : 'none', "\">").concat(todo.task, " - Priority: ").concat(todo.priority, "</span>\n            <button>Delete</button>\n        ");
         customTodoListContainer.appendChild(todoItem);
     });
 }

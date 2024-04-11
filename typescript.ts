@@ -13,6 +13,7 @@ interface Todo {
     task: string;
     completed: boolean;
     priority: number;
+    createdDate: Date; // Added createdDate property
 }
 
 class CustomTodoList {
@@ -28,15 +29,37 @@ class CustomTodoList {
             return false;
         }
 
-        // Check if the task and priority are already exists
+        // Check if the task and priority already exist
         for (const todo of this.todos) {
             if (todo.task === task && todo.priority === priority) {
                 return false; // Task already exists, return false
             }
         }
 
-        const todo: Todo = { task, completed: false, priority };
+        const todo: Todo = { task, completed: false, priority, createdDate: new Date() }; // Added createdDate
         this.todos.push(todo);
+        this.saveCustomToLocalStorage();
+        return true;
+    }
+
+    editCustomTodoTask(taskIndex: number, task: string, priority: number): boolean {
+        if (taskIndex < 0 || taskIndex >= this.todos.length || !task || priority < 1 || priority > 3) {
+            return false;
+        }
+
+        const existingTodo = this.todos[taskIndex];
+        existingTodo.task = task;
+        existingTodo.priority = priority;
+        this.saveCustomToLocalStorage();
+        return true;
+    }
+
+    deleteCustomTodoTask(taskIndex: number): boolean {
+        if (taskIndex < 0 || taskIndex >= this.todos.length) {
+            return false;
+        }
+
+        this.todos.splice(taskIndex, 1);
         this.saveCustomToLocalStorage();
         return true;
     }
@@ -110,14 +133,41 @@ customDeleteCompletedButton.addEventListener('click', () => {
     renderCustomTodos();
 });
 
+customTodoListContainer.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const todoItem = target.closest('li');
+    if (!todoItem) return; // Exit if clicked outside a todo item
+    const todoIndex = parseInt(todoItem.dataset.index!);
+    
+    // Edit todo task
+    if (target.nodeName === 'SPAN') {
+        const todo = customTodoList.getCustomTodos()[todoIndex];
+        const newTask = prompt('Enter new task:', todo.task);
+        const newPriority = parseInt(prompt('Enter new priority (1-3):', String(todo.priority)) || '0');
+        if (newTask !== null && !isNaN(newPriority) && newPriority >= 1 && newPriority <= 3) {
+            customTodoList.editCustomTodoTask(todoIndex, newTask, newPriority);
+            renderCustomTodos();
+        }
+    } 
+    // Delete todo task
+    else if (target.nodeName === 'BUTTON') {
+        if (confirm('Are you sure you want to delete this todo?')) {
+            customTodoList.deleteCustomTodoTask(todoIndex);
+            renderCustomTodos();
+        }
+    }
+});
+
 function renderCustomTodos() {
     customTodoListContainer.innerHTML = '';
     const todos = customTodoList.getCustomTodos();
     todos.forEach((todo, index) => {
         const todoItem = document.createElement('li');
+        todoItem.dataset.index = String(index);
         todoItem.innerHTML = `
             <input type="checkbox" ${todo.completed ? 'checked' : ''} data-index="${index}">
             <span style="text-decoration: ${todo.completed ? 'line-through' : 'none'}">${todo.task} - Priority: ${todo.priority}</span>
+            <button>Delete</button>
         `;
         customTodoListContainer.appendChild(todoItem);
     });

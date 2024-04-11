@@ -27,6 +27,14 @@ class CustomTodoList {
         if (!task || priority < 1 || priority > 3) {
             return false;
         }
+
+        // Check if the task and priority are already exists
+        for (const todo of this.todos) {
+            if (todo.task === task && todo.priority === priority) {
+                return false; // Task already exists, return false
+            }
+        }
+
         const todo: Todo = { task, completed: false, priority };
         this.todos.push(todo);
         this.saveCustomToLocalStorage();
@@ -38,6 +46,11 @@ class CustomTodoList {
             this.todos[todoIndex].completed = true;
             this.saveCustomToLocalStorage();
         }
+    }
+
+    deleteCompletedTodos(): void {
+        this.todos = this.todos.filter(todo => !todo.completed);
+        this.saveCustomToLocalStorage();
     }
 
     getCustomTodos(): Todo[] {
@@ -63,6 +76,7 @@ const customTaskInput = document.getElementById('task') as HTMLInputElement;
 const customPriorityInput = document.getElementById('priority') as HTMLInputElement;
 const customTodoListContainer = document.getElementById('todo-list') as HTMLUListElement;
 const customMarkCompletedButton = document.getElementById('mark-completed') as HTMLButtonElement;
+const customDeleteCompletedButton = document.getElementById('delete-completed') as HTMLButtonElement;
 const customErrorMessage = document.getElementById('error-message') as HTMLDivElement;
 
 customTodoForm.addEventListener('submit', (e) => {
@@ -88,6 +102,11 @@ customMarkCompletedButton.addEventListener('click', () => {
         const todoIndex = parseInt(checkbox.dataset.index!);
         customTodoList.markCustomTodoCompleted(todoIndex);
     });
+    renderCustomTodos();
+});
+
+customDeleteCompletedButton.addEventListener('click', () => {
+    customTodoList.deleteCompletedTodos();
     renderCustomTodos();
 });
 

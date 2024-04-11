@@ -7,16 +7,28 @@
     <title>Todo App</title>
 </head>
 <body>
+<header>
     <h1>Todo List App</h1>
+</header>
+
+    <main>
     <form id="todo-form">
         <input type="text" id="task" placeholder="Enter task">
         <input type="number" id="priority" placeholder="Priority (1-3)">
         <button type="submit">Add Todo</button>
     </form>
     <ul id="todo-list"></ul>
-    <button id="mark-completed">Mark Completed</button>
-    <div id="error-message" style="color: red"></div>
-
-    <script src="/index.4803c67c.js" defer=""></script>
+    <div id="error-message" style="color: #ea6b6b"></div>
+    <div id="action-buttons">
+        <button id="mark-completed">Mark Selected Completed</button>
+        <button id="delete-completed">Delete Completed</button>
+    </div>
+</main>
+<footer>
+    <p>&copy; 2024 Todo App. All rights reserved.</p>
+    <p>Contact: daab2301@student.miun.se</p>
+</footer>
+    <script src="/index.52902b39.js" defer=""></script>
+   
 </body>
 </html>
